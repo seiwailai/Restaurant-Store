@@ -145,8 +145,6 @@ EMAIL_HOST_PASSWORD = os.environ.get('GMAIL_APPPASS')
 
 DEFAULT_FROM_EMAIL = os.environ.get('GMAIL_USER')
 
-print(DEFAULT_FROM_EMAIL, EMAIL_HOST_PASSWORD)
 
 STRIPE_SK = os.environ.get('STRIPE_SK')
 STRIPE_PK = os.environ.get('STRIPE_PK')
-print(STRIPE_PK, STRIPE_SK)
