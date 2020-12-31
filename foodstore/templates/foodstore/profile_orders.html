@@ -1,0 +1,60 @@
+{% extends 'foodstore/profile_base.html' %}
+{% load static %}
+{% block profileContent %}
+    {% if orders %}
+        {% for order in orders %}
+            <div class="card w-100 mb-4 font-small">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center font-weight-bold">
+                        <div class="">Transaction ID: <span>{{ order.transaction_id }}</span></div>
+                        <div class="">
+                            <div class="text-dark d-inline mr-2">Date: <span>{{ order.date_ordered }}</span></div>
+                            <div class="text-dark d-inline">Status: <span>{% if order.complete %} Completed {% else %} Pending {% endif %}</span></div>
+                        </div>
+                        <button class="btn font-small btn-sm" type="button" data-toggle="collapse" data-target="#orderID{{ order.id }}" aria-expanded="false" aria-controls="orderID{{ order.id }}">
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                    </div>
+                    <div class="collapse mt-4" id="orderID{{ order.id }}">
+                        <div class="row justify-content-between">
+                            <div class="col-lg-8">
+                                <div class="row">
+                                    {% for item in order.orderitem_set.all %}
+                                        <div class="col-lg-6">
+                                            <figure class="d-flex align-items-center mb-4">
+                                                <div class=""><img src="{{ item.product.imageURL }}" class="border img-xsm"></div>
+                                                <figcaption class="ml-2">
+                                                    <p class="m-0">{{ item.product.name }}</p>
+                                                    <span class="text-muted font-italic">{{ item.quantity }}x = RM{{ item.get_total }} </span>
+                                                </figcaption>
+                                            </figure>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <dl class="d-flex justify-content-between">
+                                    <dt>Subtotal:</dt>
+                                    <dd>RM <span class="orderAmount">{{ order.get_cart_total }}</span></dd>
+                                </dl>
+                                <span id="discountCode" class="badge badge-success"></span>
+                                <dl class="d-flex justify-content-between">
+                                    <dt>Discount:</dt>
+                                    <dd class="text-success">(RM <span class="discount">{{ order.get_discount_amount }}</span>)</dd>
+                                </dl>
+                                <dl class="d-flex justify-content-between">
+                                    <dt>Delivery:</dt>
+                                    <dd class="delivery">{{ order.get_delivery_fees }}</dd>
+                                </dl>
+                                <dl class="d-flex justify-content-between">
+                                    <dt>Grand Total:</dt>
+                                    <dd class="text-dark b"><strong>RM <span class="grandTotal">{{ order.get_cart_grand_total }}</span></strong></dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endblock %}

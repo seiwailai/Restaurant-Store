@@ -1,0 +1,180 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static '/foodstore/main.css' %}">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/361801abe1.js" crossorigin="anonymous"></script>
+    <script>
+        const user = '{{request.user}}'
+
+        function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+        const csrftoken = getCookie('csrftoken');
+    </script>
+    {% block head %}
+    {% endblock %}
+
+    <title>{{ title }}</title>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light sticky-top bg-mustard-yellow">
+        <div class="container d-flex">
+            <a class="navbar-brand" href="{% url 'store-home' %}">
+                <img class="logo" src="{% static '/images/el-cerdo logo 150px.png' %}" alt="" loading="lazy">
+            </a>
+            <button class="mobile-ml-none navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item nav-item-font font-color-brown my-auto">
+                        <a class="nav-link" href="{% url 'store-home' %}">HOME</a>
+                    </li>
+                    <li class="nav-item nav-item-font font-color-brown my-auto">
+                        <a class="nav-link" href="#">ABOUT</a>
+                    </li>
+                    <li class="nav-item nav-item-font font-color-brown my-auto">
+                        <a class="nav-link" href="#">SERVICES</a>
+                    </li>
+                    <li class="nav-item nav-item-font font-color-brown my-auto">
+                        <a class="nav-link" href="#">CONTACT</a>
+                    </li>
+                    {% if user.is_authenticated %}
+                        <li class="nav-item font-color-brown mobile-right-nav my-auto">
+                            <a class="btn btn-default btn-hover font-color-brown outline-brown nav-item-font" href="{% url 'store-logout' %}">Log Out</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item font-color-brown mobile-right-nav my-auto">
+                            <a class="btn btn-default btn-hover font-color-brown outline-brown nav-item-font" href="{% url 'store-login' %}">Log In</a>
+                        </li>
+                        <li class="nav-item font-color-brown mobile-right-nav my-auto">
+                            <a class="btn btn-default btn-hover font-color-brown outline-brown nav-item-font" href="{% url 'store-signup' %}">Sign Up</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+            <div class="ml-auto d-flex align-items-center">
+                <a type="button" class="mr-2" href="{% url 'store-cart' %}">
+                    <i class="fas fa-shopping-cart fa-2x fa-hover font-color-brown"></i>
+                </a>
+                {% if user.is_authenticated %}
+                    <a class="mr-2" href="{% url 'store-profile' 'Orders' %}"><i class="p-0 fas fa-user-circle fa-2x fa-hover font-color-brown"></i></a>
+                {% endif %}
+            </div>
+            <ul class="desktop-right-nav navbar-nav d-block">
+                {% if user.is_authenticated %}
+                    <li class="nav-item ml-1 d-inline-block">
+                        <a class="btn btn-default btn-hover bg-mustard-yellow font-color-brown outline-brown nav-item-font" href="{% url 'store-logout' %}">Log Out</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item ml-1 d-inline-block">
+                        <a class="btn btn-default btn-hover bg-mustard-yellow font-color-brown outline-brown nav-item-font" href="{% url 'store-login' %}">Log In</a>
+                    </li>
+                    <li class="nav-item ml-1 d-inline-block">
+                        <a class="btn btn-default btn-hover bg-mustard-yellow font-color-brown outline-brown nav-item-font" href="{% url 'store-signup' %}">Sign Up</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+    {% block content %}{% endblock %}
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        function cartButtonAjax(section){
+            section.find(".updateCart").click(function(e){
+                $.ajaxSetup({
+                    beforeSend: function(xhr, settings){
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken)
+                    }
+                })
+                e.preventDefault();
+                if (user === 'AnonymousUser'){
+                    $('#addCartModalText').html('Please log in to add to cart.')
+                }
+                else {
+                    const dataAction = $(this).data('action');
+                    const productID = $(this).data('product');
+                    data = {'dataAction': dataAction, 'productID': productID}
+                    if (dataAction === 'addQuantity'){
+                        const quantity = $('#inputQuantity').val()
+                        data['quantity'] = quantity
+                    }
+                    $.ajax({
+                        url:'/cart/item_updated/',
+                        method: 'POST',
+                        dataType: 'json',
+                        data: JSON.stringify(data),
+                        success: function(data){
+                            if (dataAction === 'addToCart' || dataAction === 'addQuantity'){
+                            }
+                            else {
+                                renderCart(data, productID)
+                            }
+                        },
+                        error: function(error){
+                            console.log(error)
+                        }
+                    })
+                }
+            })
+        }
+
+        function renderBillOverview(data){
+            $('.orderAmount').html(data['orderAmount'])
+            $('.delivery').html(data['delivery'])
+            $('.grandTotal').html(data['grandTotal'])
+            $('.discount').html(data['discount'])
+            $('#discountCode').html(`${data['discountCode']} is applied`)
+        }
+
+        {% block js %}{% endblock %}
+        {% block jquery %}{% endblock %}
+        window.onpopstate = function(e){
+            if (!history.state){
+                console.log('hello')
+                $.ajax({
+                    url: "",
+                    method: 'GET',
+                    dataType: 'json',
+                    data: {},
+                    success: function(data){
+                        content = updateProductList(data['page_obj']['object_list'])
+                        $("#product-content").html(content)
+                },
+                error: function(error){
+                    console.log(error)
+                    console.log("error")
+                }
+            })
+        } else{
+            $("body").html(history.state)
+        }
+    }
+    </script>
+    </body>
+</html> 

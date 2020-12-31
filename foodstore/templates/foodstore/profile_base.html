@@ -1,0 +1,39 @@
+{% extends 'foodstore/base.html' %}
+{% load static %}
+{% block content %}
+    <div class="container">
+        <div id="profileContainer" class="d-flex">
+                <aside class="col-lg-2">
+                    <div class="side-sticky">
+                        <div class="my-4">
+                            <div class="row justify-content-center mb-3">
+                                <div class="text-dark">{{ request.user }}'s account</div>
+                            </div>
+                            <div class="row justify-content-center">
+                                <div id="profileChoices" class="list-group">
+                                    {% for choice in GET_subURL %}
+                                        {% if choice == kwargs.choice %}
+                                            <a type="button" class="list-group-item list-group-item-action active" href="{% url 'store-profile' choice %}">{{ choice }}</a>
+                                        {% else %}
+                                            <a type="button" class="list-group-item list-group-item-action" href="{% url 'store-profile' choice %}">{{ choice }}</a>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+            <aside class="col-lg-10">
+                <div class="my-4">
+                    <div class="row">
+                        <h4 id="accountTitle" class="card-title">{{ subtitle }}</h4>
+                    </div>
+                    <div id="accountContent" class="row justify-content-center">
+                        {% block profileContent %}
+                        {% endblock %}
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+{% endblock %}

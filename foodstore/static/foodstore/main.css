@@ -1,0 +1,262 @@
+body{
+    font-family: 'Open Sans', sans-serif;
+}
+
+.bg-mustard-yellow{
+    background-color:  rgb(226, 177, 68);
+}
+
+.bg-brown{
+    background-color: rgba(138, 37, 41, 0.5);
+}
+
+.navbar-brand {
+    width: 6rem;
+}
+
+.logo {
+    position: relative;
+    width: 100%;
+}
+
+.nav-item-font{
+    font-size: 0.75rem;
+    font-weight: bolder;
+}
+
+.font-color-brown{
+    color: rgb(138, 37, 41);
+}
+
+.outline-brown{
+    border: 2px solid;
+    border-radius: .25rem;
+    border-color: rgb(138, 37, 41);
+}
+
+.btn-hover:hover{
+    color: white;
+    background-color: rgb(138, 37, 41);
+}
+
+.fa-hover {
+    transition: color 0.3s ease-out;
+}
+
+.fa-hover:hover{
+    color: white;
+}
+
+.dropdown:hover>.dropdown-menu{
+    display: block;
+}
+
+.table-body-font{
+    font-family: "Apple Chancery", cursive;
+    font-weight: normal;
+}
+
+.mobile-right-nav{
+    visibility: hidden;
+}
+
+@media screen and (max-width: 991px) {
+    .navbar-toggler { order: 1; }
+    .navbar-collapse { order: 2; }
+    .desktop-right-nav {display: none!important;}
+    .mobile-right-nav {visibility: visible;
+                        margin-bottom: 0.25rem!important;
+    }
+}
+
+.carousel{
+    width: 100%;
+}
+
+.list-group{
+    font-size: small;
+}
+
+.menu-categories{
+    width: 20%!important;
+}
+
+.list-group-item.active {
+    background-color: rgb(138, 37, 41)!important;
+}
+
+.product-content {
+    justify-content: center;
+    display: block;
+    width: 80%!important;
+}
+
+.product-grid-container {
+    justify-content: center;
+    display: block;
+}
+
+.product-box {
+    vertical-align: top;
+    display: inline-block;
+    width: 33%;
+    text-align: center;
+    position: relative;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-bottom: 3rem;
+}
+
+.product-link{
+    text-decoration-line: none!important;
+    color: black;
+    transition: all 0.15s ease-in-out;
+}
+
+.product-description {
+    font-size: small;
+    display: -webkit-box;
+   -webkit-line-clamp: 2; /* number of lines to show */
+   -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+}
+
+.pagination{
+    font-size: small;
+    justify-content: center;
+    margin-top: 0.75rem;
+}
+
+.add-to-cart{
+    font-size: small;
+}
+
+.filter-header{
+    font: small;
+}
+
+.font-small{
+    font-size: small;
+}
+
+.font-medium{
+    font-size: medium;
+}
+
+input:focus{
+    outline: none!important;
+}
+
+.circle-btn{
+    height: 35px;
+    width: 35px;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.icon-container{
+    margin: auto;
+    display: flex;
+    align-items: center;
+    transition: all 0.5s ease-in-out;
+}
+
+.icon-container svg{
+    margin: 0 auto;
+}
+
+.h-90vh {
+    height: 90vh!important;
+}
+
+.img-sm{
+    width: 100px;
+    height: auto;
+    vertical-align: bottom!important;
+}
+
+.img-xsm{
+    width: 70px;
+    height: auto;
+    vertical-align: bottom!important;
+}
+
+.img-big-wrap{
+    margin-bottom: 10px;
+    border-radius: 0.37rem;
+    overflow: hidden;
+    background-color: #fff;
+}
+
+.h-90pct{
+    height: 90%;
+}
+
+.img-thumbnail{
+    width: 70px;
+    height: auto;
+}
+
+.gallery-wrap{
+    height: 100%!important;
+}
+
+.product-details {
+    padding: 1.5rem;
+}
+
+.input-spinner {
+    width: 125px;
+    flex-wrap: nowrap;
+    display: inline-flex;
+    vertical-align: middle;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+.side-sticky {
+    position: sticky!important;
+    top: 90px;
+}
+
+@media screen and (max-width: 1200px) {
+    .product-box {width: 32.7%;}
+}
+
+@media screen and (max-width: 991px) {
+    .menu-categories {display: none!important;}
+    .product-box {width: 49%;}
+    .product-content {width: 100%!important;}
+    .coupon {margin-top: 1rem!important;}
+}
+
+@media screen and (max-width: 768px) {
+    .blank {display:none!important;}
+    .gallery-wrap {height: auto!important;}
+    .side-sticky { position: block!important;}
+}
+
+@media screen and (max-width: 576px) {
+    .search-bar {display: none!important;}
+    .search-modal-btn {display: inline-block!important;
+                        margin-bottom: 1rem;
+    }
+    .filter-header .pagination {margin-left: auto!important;
+                            margin-right: 0!important;
+    }
+    #profileContainer {
+        display: block!important;
+    }
+}

@@ -1,0 +1,38 @@
+{% extends 'foodstore/authentication_template.html' %}
+{% load static %}
+{% block authentication %}
+  <div class="card-title text-center">Sign Up</div>
+  <form method="POST" class="form-signin text-center">
+    {% csrf_token %}
+      {{ form.username }}
+      <div class="name d-flex justify-content-between">
+          {{ form.first_name }}
+          <div class="w-25"></div>
+          {{ form.last_name }}
+      </div>
+      {{ form.email }}
+      {{ form.password1 }}
+      {{ form.password2 }}
+      <div class="checkbox mb-3 d-flex">
+        <label class="font-small mb-0 d-flex align-items-center">
+          <input class="mr-1" id="tnc" type="checkbox" value="tnc" required> I have read and agree to the&nbsp;
+        </label>
+        <a href="#" class="font-small">terms and conditions.</a>
+      </div>
+      <button class="btn btn-lg btn-primary btn-block mx-auto font-small" type="submit" style="width: fit-content;">Sign up</button>
+      {% if form.errors %}
+        <div class="font-small mt-3 alert alert-danger p-0">
+          {% for field in form %}
+            {% if field.errors %}
+              {% for error in field.errors %}
+                <p class="my-1 font-small mx-1"><i class="fas fa-exclamation-triangle" style="width: 30px;"></i>{{ error|escape }}</p>
+              {% endfor %}
+            {% endif %}
+          {% endfor %}
+          {% if form.non_field_errors %}
+            {{ form.non_field_errors }}
+          {% endif %}
+        </div>
+      {% endif %}
+  </form>
+{% endblock %}

@@ -1,0 +1,105 @@
+{% extends 'foodstore/profile_base.html' %}
+{% load static %}
+{% block profileContent %}
+    <div class="card shadow w-100">
+        <div class="card-body">
+            <div class="card-title text-center">Edit Address</div>
+            <form id="deliveryEditForm" class="form-signin mx-auto" style="max-width: 500px;">
+                <div class="row">
+                    <div class="form-group col-sm-6">
+                        {{ form.firstName }}
+                    </div>
+                    <div class="form-group col-sm-6">
+                        {{ form.lastName }}
+                    </div>
+                    <div class="form-group col-sm-6">
+                        {{ form.phone }}
+                    </div>
+                    <div class="form-group col-sm-6">
+                        {{ form.email }}
+                    </div>
+                </div> <!-- row.// -->
+                <div class="row">
+                    <div class="form-group col-sm-12">
+                        {{ form.address1 }}
+                    </div>
+                    <div class="form-group col-sm-12">
+                        {{ form.address2 }}
+                    </div>
+                    <div class="form-group col-sm-6">
+                        {{ form.city }}
+                    </div>
+                    <div class="form-group col-sm-6">
+                        {{ form.state }}
+                    </div>
+                    <div class="form-group col-sm-6">
+                        {{ form.country }}
+                    </div>
+                    <div class="form-group col-sm-6">
+                        {{ form.postalCode }}
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-sm-6">
+                        {{ form.default }}
+                        <label for="default">Default</label>
+                    </div>
+                </div>
+                <div id="deliveryEditErrors" class="font-small mt-3 alert alert-danger p-0" hidden></div>
+                <button id="deliveryEditBtn" data-address="{{ kwargs.pk }}" class="btn btn-lg btn-primary btn-block mx-auto font-small" type="submit" style="width: fit-content;">Save</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+<script>
+    {% block js %}
+        function getEditDeliveryInfoData(){
+            const inputs = $('#deliveryEditForm').find('input')
+            deliveryData = {}
+            for (i=0; i<inputs.length; i++){
+                deliveryData[inputs[i].name] = inputs[i].value
+            }
+            return deliveryData
+        }
+
+        function renderDeliveryEditFormErrors(formErrors){
+            htmlcontext = ''
+            for (const field in formErrors){
+                for (i=0; i<formErrors[field].length; i++){
+                    htmlcontext += `<p class="my-1 font-small mx-1"><i class="fas fa-exclamation-triangle" style="width: 30px;"></i>${field.charAt(0).toUpperCase() + field.slice(1)}: ${formErrors[field][i]}</p>`
+                }
+            }
+            $('#deliveryEditErrors').attr('hidden', false)
+            $('#deliveryEditErrors').html(htmlcontext)
+        }
+    {% endblock %}
+    {% block jquery %}
+        function editDeliveryInfo(){
+            $('#deliveryEditBtn').click(function(e){
+                $.ajaxSetup({
+                    beforeSend: function(xhr, settings){
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken)
+                    }
+                })
+                e.preventDefault()
+                const deliveryData = getEditDeliveryInfoData()
+                const dataAddress = $(this).data('address')
+                $.ajax({
+                    url: `/profile/Addresses/${dataAddress}/`,
+                    method: 'POST',
+                    dataType: 'json',
+                    data: JSON.stringify({'deliveryData': deliveryData}),
+                    success: function(data){
+                        window.location.href = data.url
+                    },
+                    error: function(data){
+                        formErrors = data.responseJSON.error
+                        renderDeliveryEditFormErrors(formErrors)
+                    }
+                })
+            })   
+        }
+
+    $(document).ready(editDeliveryInfo())
+    {% endblock %}
+</script>

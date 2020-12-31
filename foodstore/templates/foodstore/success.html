@@ -1,0 +1,20 @@
+{% extends 'foodstore/base.html' %}
+{% load static %}
+{% block content %}
+  <div class="container">
+    <div class="col-lg-6 mx-auto card shadow my-4">
+      <div class="card-body">
+        <h4 class="card-title mb-4">
+          Payment success
+        </h4>
+        <hr>
+        <p>Thanks for your order!</p>
+        <p>
+          We appreciate your business! If you have any questions, please email
+          <a href="mailto:orders@example.com">orders@example.com</a>.
+        </p>
+        <a class="btn btn-primary" href="{% url 'store-home' %}">Return to store</a>
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'foodstore/profile_base.html' %}
+{% load static %}
+{% block profileContent %}
+    {% for address in addresses %}
+        <div class="card w-100 mb-4 font-small text-left">
+            <div class="card-body d-flex align-items-center justify-content-between">
+                <div class="ml-3 my-0">
+                    {% if address.default %}
+                        <div class="row">
+                            <p class="badge badge-success">Default Delivery Info</p>
+                        </div>
+                    {% endif %}
+                    <div class="row">
+                        <p class="col-lg-3" >Name: </p>
+                        <div class="col-lg-9">
+                            <p class="m-0">{{ address.firstName }} {{ address.lastName }}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <p class="col-lg-3" >Phone: </p>
+                        <div class="col-lg-9">
+                            <p class="m-0">{{ address.phone }}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <p class="col-lg-3" >Address: </p>
+                        <div class="col-lg-9">
+                            <p class="m-0">{{ address.address1 }},</p>
+                            {% if address.address2 %}
+                                <p class="m-0">{{ address.address2 }}</p>
+                            {% endif %}
+                            <p class="m-0">{{ address.postalCode }}, {{ address.city }},</p>
+                            <p class="m-0">{{ address.state }}.</p>
+                        </div>
+                    </div>
+                </div>
+                <a href="{% url 'store-profile-address' address.id %}" class="btn btn-primary">Edit</a>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}

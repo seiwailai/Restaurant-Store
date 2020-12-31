@@ -1,0 +1,316 @@
+{% extends 'foodstore/base.html' %}
+{% load static %}
+{% block head %}
+  <script src="https://js.stripe.com/v3/"></script>
+{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <aside class="col-lg-9">
+            <div id="previewOrder">
+                {% if cartData.items %}
+                    <div class="card my-4">
+                        <div class="card-body">
+                            <h4 class="card-title text-center">Review cart</h4>
+                            <hr>
+                            <div class="row">
+                                {% for item in cartData.items %}
+                                    <div class="col-md-6">
+                                        <figure class="d-flex align-items-center mb-4">
+                                            <div class=""><img src="{{ item.product.imageURL }}" class="border img-sm"></div>
+                                            <figcaption class="ml-2">
+                                                <p class="m-0">{{ item.product.name }}</p>
+                                                <span class="text-muted font-italic">{{ item.quantity }}x = RM{{ item.get_total }} </span>
+                                            </figcaption>
+                                        </figure>
+                                    </div>
+                                {% endfor %}
+                            </div> <!-- row.// -->
+                        </div> <!-- card-body.// -->
+                    </div> <!-- card.// -->
+                    
+                    
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <div class="text-right">
+                                {% if deliveryDefault %}
+                                    <input class="d-inline" type="checkbox" id="deliveryDefaultCheckBox" data-action="getDefaultDeliveryInfo" data-class="deliveryForm" name="deliveryDefaultCheckBox">
+                                    <label class="d-inline" for="deliveryDefaultCheckBox">Use default info.</label>
+                                {% else %}
+                                    <input class="d-inline" type="checkbox" id="deliveryDefaultCheckBox" data-action="getDefaultDeliveryInfo" data-class="deliveryForm" name="deliveryDefaultCheckBox" disabled>
+                                    <label class="d-inline" for="deliveryDefaultCheckBox">Fill the following form and info will be saved as default for next time use or <a href="#">you may add default here.</a></label>
+                                {% endif %}
+                            </div>
+                            <form id="deliveryForm" action="">
+                                <h4 class="card-title text-center">Contact info</h4>
+                                <hr>
+                                <div class="row">
+                                    <div class="form-group col-sm-6">
+                                        {{ form.firstName }}
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        {{ form.lastName }}
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        {{ form.phone }}
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        {{ form.email }}
+                                    </div>
+                                </div> <!-- row.// -->
+                                <h4 class="card-title text-center">Delivery info</h4>
+                                <hr>
+                                <div class="row">
+                                    <div class="form-group col-sm-12">
+                                        {{ form.address1 }}
+                                    </div>
+                                    <div class="form-group col-sm-12">
+                                        {{ form.address2 }}
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        {{ form.city }}
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        {{ form.state }}
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        {{ form.country }}
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        {{ form.postalCode }}
+                                    </div>
+                                </div>	
+                            </form>
+                            <div id="deliveryFormError" class="font-small mt-3 alert alert-danger p-0" hidden></div>
+                        </div> <!-- card-body.// -->
+                    </div> <!-- card.// -->
+                {% else %}
+                    <div class="card my-4">
+                        <div class="card-body">
+                            <div class="mx-auto mb-4" style="width: fit-content;">
+                                <i class="fas fa-exclamation-triangle fa-7x" style="color: #ff0f0f;"></i>
+                            </div>
+                            <h4 class="cart-title text-center mb-4">Cart is empty.</h4>
+                            <p class="text-center">Looks like you have no items in your shopping cart.</p>
+                            <p class="text-center">Click <a href="{% url 'store-home' %}">here</a> to continue shopping.</p>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </aside> <!-- col.// -->
+        
+        <aside class="col-lg-3 my-4">
+            <div id="priceOverview" class="side-sticky">
+                <div class="card shadow mb-4">
+                    <div class="card-body">
+                        <form>
+                            <div class="form-group">
+                                <label>Have voucher?</label>
+                                <div class="input-group">
+                                    <input id="voucherCodeInput" type="text" class="form-control" name="" placeholder="Coupon code">
+                                    <span class="input-group-append">
+                                        <button data-class='voucher' data-action='applyVoucher' class="btn btn-primary applyVoucher">Apply</button>
+                                    </span>
+                                </div>
+                            </div>
+                            <div id="voucherCodeError" class="font-small alert alert-danger p-0" hidden></div>
+                        </form>
+                    </div> <!-- card-body.// -->
+                </div> <!-- card.// -->
+                <div class="card shadow">
+                    <div class="card-body">
+                        <dl class="d-flex justify-content-between">
+                            <dt>Subtotal price:</dt>
+                            <dd>RM <span class="orderAmount">{{ cartData.orderAmount }}</span></dd>
+                        </dl>
+                        <span id="discountCode" class="badge badge-success"></span>
+                        <dl class="d-flex justify-content-between">
+                            <dt>Discount:</dt>
+                            <dd class="text-success">(RM <span class="discount">{{ cartData.discount }}</span>)</dd>
+                        </dl>
+                        <dl class="d-flex justify-content-between">
+                            <dt>Delivery:</dt>
+                            <dd class="delivery">{{ cartData.delivery }}</dd>
+                        </dl>
+                        <dl class="d-flex justify-content-between">
+                            <dt>Grand Total:</dt>
+                            <dd class="text-dark b"><strong>RM <span class="grandTotal">{{ cartData.grandTotal }}</span></strong></dd>
+                        </dl>
+                        <hr>
+                        {% if cartData.items %}
+                            <button id="proceedPayment" data-class='deliveryForm' data-action="submitDeliveryForm" class="btn btn-primary btn-block"> Proceed To Payment </a>
+                        {% else %}
+                            <button id="proceedPayment" data-class='deliveryForm' data-action="submitDeliveryForm" class="btn btn-primary btn-block disabled" tabindex="-1"> Proceed To Payment </a>
+                        {% endif %}
+                        
+                    </div> <!-- card-body.// -->
+                </div> <!-- card.// -->
+            </div>
+        </aside> <!-- col.// -->
+    </div>
+</div>
+{% endblock %}
+
+
+
+
+<script>
+    {% block js%}
+        let inputs = $('#deliveryForm').find('input')
+
+        function clearDefaultDeliveryInfo(){
+            for (i=0; i<inputs.length; i++){
+                name = inputs[i].name
+                inputs[i].value = ''
+                inputs[i].disabled = false
+            }
+        }
+
+        function renderDefaultDeliveryInfo(deliveryDefault){
+            for (i=0; i<inputs.length; i++){
+                name = inputs[i].name
+                inputs[i].value = deliveryDefault[name]
+                inputs[i].disabled = true
+            }
+        }
+
+        function renderDeliveryError(formErrors){
+            htmlcontext = ''
+            for (const field in formErrors){
+                for (i=0; i<formErrors[field].length; i++){
+                    htmlcontext += `<p class="my-1 font-small mx-1"><i class="fas fa-exclamation-triangle" style="width: 30px;"></i>${field.charAt(0).toUpperCase() + field.slice(1)}: ${formErrors[field][i]}</p>`
+                }
+            }
+            $('#deliveryFormError').attr('hidden', false)
+            $('#deliveryFormError').html(htmlcontext)
+        }
+
+        function getDeliveryForm(){
+            deliveryData = {}
+            for (i=0; i<inputs.length; i++){
+                deliveryData[inputs[i].name] = inputs[i].value
+            }
+            return deliveryData
+        }
+
+        function showPayBtn(){
+            $('#previewOrder').attr('hidden', true)
+            $('#proceedPayment').attr('disabled', true)
+            $('#proceedPayment').attr('hidden', true)
+            $('#paymentMethod').attr('hidden', false)
+            $('#makePayment').attr('disabled', false)
+            $('#makePayment').attr('hidden', false)
+        }
+
+        function getDefaultDelivery(){
+            $('#deliveryDefaultCheckBox').click(function(e){
+                console.log(csrftoken)
+                $.ajaxSetup({
+                    beforeSend: function(xhr, settings){
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken)
+                    }
+                })
+                if ($(this).is(':checked')){
+                    const dataAction = $(this).data('action')
+                    const dataClass = $(this).data('class')
+                    $.ajax({
+                        url: '/cart/check_out/',
+                        method: 'POST',
+                        dataType: 'json',
+                        data: JSON.stringify({'dataAction': dataAction, 'dataClass': dataClass}),
+                        success: function(data){
+                            renderDefaultDeliveryInfo(data['deliveryDefault'])
+                        },
+                        error: function(data){
+                            console.log(data)
+                        }
+                    })
+                }
+                else {
+                    clearDefaultDeliveryInfo()
+                }
+            })
+        }
+
+        function fetchCheckOutSession(url){
+            $.ajaxSetup({
+                    beforeSend: function(xhr, settings){
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken)
+                    }
+                })
+            $.ajax({
+                url: url,
+                method: 'POST',
+                success: function(data){
+                    var stripe = Stripe(data['STRIPE_PK']);
+                    stripe.redirectToCheckout({
+                        sessionId: data['session_id']
+                    })
+                },
+                error: function(data){
+                }
+            })
+        }
+
+        function proceedToPayment(){
+            $('#proceedPayment').click(function(e){
+                $(this).prop('disabled', true)
+                $.ajaxSetup({
+                    beforeSend: function(xhr, settings){
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken)
+                    }
+                })
+                e.preventDefault();
+                const dataAction = $(this).data('action')
+                const dataClass = $(this).data('class')
+                const deliveryData = getDeliveryForm()
+                $.ajax({
+                    url: '/cart/check_out/',
+                    method: 'POST',
+                    dataType: 'json',
+                    data: JSON.stringify({'deliveryData': deliveryData, 'dataAction': dataAction, 'dataClass': dataClass}),
+                    success: function(data){
+                        fetchCheckOutSession(data['url'])
+                    },
+                    error: function(data){
+                        $('#proceedPayment').prop('disabled', false)
+                        errors = data.responseJSON.error
+                        renderDeliveryError(errors)
+                    }
+                })
+            })
+        }
+
+        function applyVoucher(){
+            $('.applyVoucher').click(function(e){
+                $.ajaxSetup({
+                    beforeSend: function(xhr, settings){
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken)
+                    }
+                })
+                e.preventDefault();
+                const dataClass = $(this).data('class')
+                const dataAction = $(this).data('action')
+                const voucherCode = $('#voucherCodeInput').val()
+                $.ajax({
+                    url: '/cart/check_out/',
+                    method: 'POST',
+                    dataType: 'json',
+                    data: JSON.stringify({'dataAction': dataAction, 'dataClass': dataClass, 'voucherCode': voucherCode}),
+                    success: function(data){
+                        $("#voucherCodeError").prop('hidden', true)
+                        renderBillOverview(data)
+                        $("#voucherCodeInput").val('')
+                    },
+                    error: function(data){
+                        $("#voucherCodeError").html(`<p class="my-1 font-small mx-1"><i class="fas fa-exclamation-triangle" style="width: 30px;"></i>${data.responseJSON['error']}</p>`)
+                        $("#voucherCodeError").prop('hidden', false)
+                    }
+                })
+            })
+        }
+    {% endblock %}
+    {% block jquery %}
+        $(document).ready(proceedToPayment(), getDefaultDelivery(), applyVoucher())
+    {% endblock %}
+</script>

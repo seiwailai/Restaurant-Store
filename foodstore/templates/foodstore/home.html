@@ -1,0 +1,299 @@
+{% extends 'foodstore/base.html' %}
+{% load static %}
+{% block content %}
+    {% if carousels %}
+    <div class="container">
+        <div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel">
+            <ol class="carousel-indicators">
+                {% for i in carousels_n %}
+                    {% if i == 0 %}
+                        <li data-target="#carouselExampleCaptions" data-slide-to="{{ i }}" class="active"></li>
+                    {% else %}
+                        <li data-target="#carouselExampleCaptions" data-slide-to="{{ i }}"></li>
+                    {% endif %}
+                {% endfor %}
+            </ol>
+            <div class="carousel-inner" role="listbox">
+                {% for slide in carousels %}
+                    {% if slide == carousels.0 %}
+                        <div class="carousel-item active">
+                            <img src="{{ carousels.0.imageURL }}" class="d-block w-100" alt="">
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>{{ carousels.0.name }}</h5>
+                                <p>{{ carousels.0.caption }}</p>
+                            </div>
+                        </div>  
+                    {% else %}
+                        <div class="carousel-item">
+                            <img src="{{ slide.imageURL }}" class="d-block w-100" alt="">
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>{{ slide.name }}</h5>
+                                <p>{{ slide.caption }}</p>
+                            </div>
+                        </div>
+                    {% endif %}   
+                {% endfor %}
+            </div>
+            <a class="carousel-control-prev" href="#carouselExampleCaptions" role="button" data-slide="prev" data-touch="true">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselExampleCaptions" role="button" data-slide="next" data-touch="true">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+    </div>
+{% endif %}
+<div class="container my-5">
+    <h1 class="text-center">MENU</h1>
+</div>
+<div class="container d-flex">
+    <div class="menu-categories text-center">
+        <h5>Menu Categories</h5>
+        <div class="list-group">
+            {% for category in categories %}
+                {% if kwargs.category == category.group %}
+                    <a type="button" href="{% url 'store-category' category %}" class="list-group-item list-group-item-action active">{{ category.group }}</a>
+                {% else %}
+                    <a type="button" href="{% url 'store-category' category %}" class="list-group-item list-group-item-action">{{ category.group }}</a>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    <div class="product-content">
+        <div class="container filter-header d-flex justify-content-between align-items-center">
+            <div class="blank mr-auto w-25"></div>
+            <div class="pagination mt-0 mr-auto">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination mt-0 pagination-bar">
+                        {% if page_obj.object_list %}
+                            {% if page_obj.has_previous %}
+                            <li class="page-item"><button class="page-link get-page" data-page="1" aria-label="First">&laquo; First</button>
+                            <li class="page-item">
+                                <button class="page-link get-page" aria-label="Previous" data-page="{{ page_obj.previous_page_number }}">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                                </li>
+                            {% endif %}
+                            {% for num in page_obj.paginator.page_range %}
+                                {% if num == page_obj.number %}
+                                    <li class="page-item disabled">
+                                        <button class="page-link get-page" data-page="{{ num }}">{{ num }}</button>
+                                    </li>
+                                {% elif num > page_obj.number|add:'-3' %}
+                                    <li class="page-item"><button class="page-link get-page" data-page="{{ num }}">{{ num }}</button></li>
+                                {% elif num > page_obj.number|add:'3' %}
+                                    <li class="page-item"><button class="page-link get-page" data-page="{{ num }}">{{ num }}</button></li>
+                                {% endif %}   
+                            {% endfor %}         
+                            {% if page_obj.has_next %}
+                                <li class="page-item">
+                                    <button class="page-link get-page" data-page="{{ page_obj.next_page_number }}" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </button>
+                                </li>
+                                <li class="page-item">
+                                    <button class="page-link get-page" data-page="{{ page_obj.paginator.num_pages }}" aria-label="Last">
+                                        Last
+                                    </button>
+                                </li>
+                            {% endif %}
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+            <form class="search-bar pb-3">
+                <div class="input-group">
+                  <input type="search" name="q" class="form-control font-small" placeholder="Search">
+                  <div class="d-flex">
+                    <button class="btn-light font-small btn border" type="button"><i class="fas fa-search"></i></button>
+                  </div>
+                </div>
+            </form>
+            <button type="button" class="search-modal-btn btn btn-light font-small border d-none mt-0 ml-auto" data-toggle="modal" data-target="#searchModal">
+                <i class="fas fa-search"></i>
+            </button>
+            <!-- Modal -->
+            <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form>
+                            <div class="modal-body">
+                                <form class="search-bar-modal pb-3">
+                                    <div class="input-group">
+                                      <input type="search" name="q" class="form-control font-small rounded" placeholder="Search">
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer pt-0 border-top-0">
+                                <button type="button" class="btn btn-secondary font-small" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary font-small" data-dismiss="modal">Search</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="product-content" class="product-grid-container">
+            {% for product in page_obj.object_list %}
+                <div class="product-box">
+                    <a class="product-link" href="{% url 'store-product-detail' product.id %}">
+                        <img src="{{ product.imageURL }}" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ product.name }}</h5>
+                            <p class="card-text product-description">{{ product.description }}</p>
+                        </div>
+                    </a>
+                    <h4>RM{{ product.price }}</h4>
+                    <button class="btn btn-primary updateCart cartModalButton" data-action="addToCart" data-product="{{ product.id }}" data-toggle="modal" data-target="#addCartModal">Add To Cart</button>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="modal fade" id="addCartModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="width: fit-content; left: 50%; transform: translate(-50%, 0);">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div id="addCartModalText" class="modal-body text-center">
+                    Added to cart
+                </div>
+              </div>
+            </div>
+        </div>
+        <div class="pagination">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination pagination-bar">
+                    {% if page_obj.object_list %}
+                        {% if page_obj.has_previous %}
+                            <li class="page-item"><button class="page-link get-page" data-page="1" aria-label="First">&laquo; First</button>
+                            <li class="page-item">
+                                <button class="page-link get-page" aria-label="Previous" data-page="{{ page_obj.previous_page_number }}">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                        {% for num in page_obj.paginator.page_range %}
+                            {% if num == page_obj.number %}
+                                <li class="page-item disabled">
+                                    <button class="page-link get-page" data-page="{{ num }}">{{ num }}</button>
+                                </li>
+                            {% elif num > page_obj.number|add:'-3' %}
+                                <li class="page-item"><button class="page-link get-page" data-page="{{ num }}">{{ num }}</button></li>
+                            {% elif num > page_obj.number|add:'3' %}
+                                <li class="page-item"><button class="page-link get-page" data-page="{{ num }}">{{ num }}</button></li>
+                            {% endif %}   
+                        {% endfor %}         
+                        {% if page_obj.has_next %}
+                            <li class="page-item">
+                                <button class="page-link get-page" data-page="{{ page_obj.next_page_number }}" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </button>
+                            </li>
+                            <li class="page-item">
+                                <button class="page-link get-page" data-page="{{ page_obj.paginator.num_pages }}" aria-label="Last">
+                                    Last
+                                </button>
+                            </li>
+                        {% endif %}
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </div> 
+</div>
+{% endblock %}
+<script>
+    {% block js %}
+    function pageButtonAjax(){
+            $(".get-page").click(function(e){
+            e.preventDefault();
+            const page = $(this).data('page');
+            const searchParams = new URLSearchParams($(location).attr('search'))
+            const q = searchParams.get('q')
+            if (q){
+                url = `?q=${q}&page=${page}`
+            }
+            else{
+                url = `?page=${page}`
+            }
+            $.ajax({
+                url: url,
+                method: 'GET',
+                dataType: 'json',
+                data: {},
+                success: function(data){
+                    pageContent = updatePaginationBar(data['page_obj'])
+                    productContent = updateProductList(data['page_obj']['object_list'])
+                    $(".pagination-bar").html(pageContent)
+                    $("#product-content").html(productContent)
+                    window.history.pushState($("body").html(), `El Cerdo Page ${page}`, url)
+                    $(document).ready(pageButtonAjax)
+                    $(document).ready(cartButtonAjax($(document)))
+                },
+                error: function(error){
+                    console.log(error)
+                    console.log("error")
+                }
+            })
+            })
+        }
+
+    function updateProductList(objectList){
+        let content = ""
+        for (const id in objectList){
+            innerHTML = `<div class="product-box">
+                            <a class="product-link" href="/product/${id}">
+                                <img src="${objectList[id].imageURL}" class="card-img-top" alt="...">
+                                <div class="card-body">
+                                    <h5 class="card-title">${objectList[id].name}</h5>
+                                    <p class="card-text product-description">${objectList[id].description}</p>
+                                </div>
+                            </a>
+                            <h4>RM${objectList[id].price}</h4>
+                            <button class="btn btn-primary updateCart cartModalButton" data-action="addToCart" data-product="${id}" data-toggle="modal" data-target="#addCartModal">Add To Cart</button>
+                    </div>`
+            content += innerHTML
+        }
+        return content
+    }
+
+    function updatePaginationBar(pageObj){
+        let content =""
+        if (pageObj['has_previous']){
+            content += `<li class="page-item"><button class="page-link get-page" data-page="1" aria-label="First">&laquo; First</button>
+                        <li class="page-item">
+                            <button class="page-link get-page" aria-label="Previous" data-page="${pageObj['previous_page_number']}">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>`
+        }
+        pageRange = pageObj['paginator']['page_range']
+        for (i=0; i<pageRange.length; i++){
+            if (pageRange[i] == pageObj['number']){
+                content += `<li class="page-item disabled">
+                                <button class="page-link get-page" data-page="${pageRange[i]}">${pageRange[i]}</button>
+                            </li>`
+            }
+            else if (pageRange[i]>pageObj['number']-3 || pageRange[i]<pageObj['number']+3){
+                content += `<li class="page-item"><button class="page-link get-page" data-page="${pageRange[i]}">${pageRange[i]}</button></li>`
+            }
+        }
+        if (pageObj['has_next']){
+            content += `<li class="page-item">
+                            <button class="page-link get-page" data-page="${pageObj['next_page_number']}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </button>
+                        </li>
+                        <li class="page-item">
+                            <button class="page-link get-page" data-page="${pageObj["paginator"]["num_pages"]}" aria-label="Last">
+                                Last
+                            </button>
+                        </li>`
+        }
+        return content
+    }
+
+    {% endblock %}
+    {% block jquery %}
+        $(document).ready(cartButtonAjax($(document)), pageButtonAjax())
+    {% endblock %}
+</script>
