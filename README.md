@@ -1,5 +1,5 @@
 # Restaurant-Store
-A restaurant store website with Django, JS, Bootstrap 4, CSS and AJAX
+A restaurant store website with Django, JS, AJAX, Bootstrap 4, CSS, and HTML
 
 Description:
 1. This is a online store for restaurant.
