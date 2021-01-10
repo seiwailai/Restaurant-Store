@@ -3,8 +3,6 @@ from django.db.models import Q
 from django.contrib.auth.models import User
 from django.utils import timezone
 from phonenumber_field.modelfields import PhoneNumberField
-from PIL import Image
-
 
 # Create your models here.
 class Voucher(models.Model):
@@ -149,18 +147,7 @@ class Carousel(models.Model):
 
     def __str__(self):
         return self.name
-    
-    def save(self, *args, **kwargs):
-        super(Carousel, self).save(*args, **kwargs)
-        img = Image.open(self.image.path)
-        ratio = img.height/600
-        height = img.height/ratio
-        width = img.width/ratio
-        output_size = (int(width), int(height))
-        img.thumbnail(output_size)
-        img.save(self.image.path)
-        
-    
+             
     @property
     def imageURL(self):
         try:

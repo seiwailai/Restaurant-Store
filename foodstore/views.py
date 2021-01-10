@@ -118,7 +118,7 @@ class Home(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'El Cerdo'
+        context['title'] = 'Rump House'
         context['carousels'] = Carousel.objects.all()
         context['carousels_n'] = list(range(len(Carousel.objects.all())))
         context['categories'] = Category.objects.all()
@@ -224,8 +224,10 @@ class Login(LoginView):
     def form_valid(self, form):
         """Security check complete. Log the user in."""
         auth_login(self.request, form.get_user())
-        customer, created = Customer.objects.get_or_create(user=self.request.user)
+        customer, created = Customer.objects.get_or_create(user=self.request.user, email=self.request.user.email, firstName=self.request.user.first_name, lastName=self.request.user.last_name)
+        customer.save()
         order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        order.save()
         return HttpResponseRedirect(self.get_success_url())
 
 
@@ -321,6 +323,7 @@ class CheckoutView(LoginRequiredMixin, ListView):
                         deliveryDefault.default = False
                         deliveryDefault.save()
                     deliveryInfo.customer = customer
+                    deliveryInfo.default = True
                     deliveryInfo.save()
                     response = JsonResponse({'url': reverse('store-makePayment')})
                     response.status_code = 200
@@ -466,7 +469,6 @@ def success(request):
     order.transaction_id = uuid.uuid4()
     order.date_ordered = timezone.now()
     order.save()
-    customer.used_vouchers.add(order.discount_code)
     return render(request, 'foodstore/success.html', context)
 
 def cancel(request):

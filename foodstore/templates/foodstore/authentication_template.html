@@ -4,7 +4,9 @@
 <div class="container d-flex justify-content-center align-items-center h-90vh">
     <div class="card shadow">
         <div class="card-body">
-            <img class="mx-auto mb-3" src="{% static '/images/el-cerdo logo 150px.png' %}" alt="" width="250px" height="auto">
+            <div class="d-flex justify-content-center">
+                <img class="mx-auto mb-3" src="{% static '/images/colored logo.png' %}" alt="" width="250px" height="auto">
+            </div>
             {% block authentication %}
             {% endblock %}
             <p class="text-center font-small mt-3">Already have account? <a href="{% url 'store-login' %}">Log in here</a></p>

@@ -1,0 +1,5 @@
+#!d:\programmingprojects\djangoprojects\restaurant\.venv\scripts\python.exe
+
+import newrelic.admin
+
+newrelic.admin.main()
