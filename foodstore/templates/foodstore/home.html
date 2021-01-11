@@ -62,7 +62,7 @@
         </div>
     </div>
     <div class="product-content">
-        <div class="container filter-header d-flex justify-content-between align-items-center">
+        <div class="container filter-header">
             <div class="blank mr-auto w-25"></div>
             <div class="pagination mt-0 mr-auto">
                 <nav aria-label="Page navigation example">
@@ -103,11 +103,11 @@
                     </ul>
                 </nav>
             </div>
-            <form class="search-bar pb-3">
+            <form method="GET" class="search-bar pb-3">
                 <div class="input-group">
-                  <input type="search" name="q" class="form-control font-small" placeholder="Search">
+                  <input name="q" class="form-control font-small" placeholder="Search">
                   <div class="d-flex">
-                    <button class="btn-light font-small btn border" type="button"><i class="fas fa-search"></i></button>
+                    <button class="btn-light font-small btn border" type="submit"><i class="fas fa-search"></i></button>
                   </div>
                 </div>
             </form>
@@ -118,17 +118,17 @@
             <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <form>
+                        <form method="GET">
                             <div class="modal-body">
-                                <form class="search-bar-modal pb-3">
+                                <div class="search-bar-modal pb-3">
                                     <div class="input-group">
-                                      <input type="search" name="q" class="form-control font-small rounded" placeholder="Search">
+                                      <input name="q" class="form-control font-small rounded" placeholder="Search">
                                     </div>
-                                </form>
+                                </div>
                             </div>
                             <div class="modal-footer pt-0 border-top-0">
                                 <button type="button" class="btn btn-secondary font-small" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary font-small" data-dismiss="modal">Search</button>
+                                <button type="submit" class="btn btn-primary font-small">Search</button>
                             </div>
                         </form>
                     </div>

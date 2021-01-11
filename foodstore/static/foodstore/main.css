@@ -135,6 +135,9 @@ body{
 
 .filter-header{
     font: small;
+    display: flex!important;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .font-small{
@@ -236,6 +239,10 @@ input[type="number"] {
 }
 
 @media screen and (max-width: 991px) {
+    .search-bar {display: none!important;}
+    .search-modal-btn {display: inline-block!important;
+                        margin-bottom: 1rem;
+    }
     .menu-categories {display: none!important;}
     .product-box {width: 49%;}
     .product-content {width: 100%!important;}
@@ -249,14 +256,15 @@ input[type="number"] {
 }
 
 @media screen and (max-width: 576px) {
-    .search-bar {display: none!important;}
-    .search-modal-btn {display: inline-block!important;
-                        margin-bottom: 1rem;
-    }
     .filter-header .pagination {margin-left: auto!important;
                             margin-right: 0!important;
     }
     #profileContainer {
         display: block!important;
+    }
+}
+
+@media screen and (max-width: 404px) {
+    .filter-header {display: block!important;
     }
 }
