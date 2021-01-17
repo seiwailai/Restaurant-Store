@@ -70,8 +70,14 @@ class Product(models.Model):
 
     @property
     def imageURL(self):
+        from django.conf import settings
+        from .utils import create_presigned_url
         try:
             url = self.image.url
+            tmpkey = url.split('/')[3:]
+            tmpkey[-1] = tmpkey[-1].split('?')[0]
+            tmpkey = '/'.join(tmpkey)
+            url = create_presigned_url(settings.AWS_STORAGE_BUCKET_NAME + '-resized', tmpkey, )
         except:
             url = ''
         return url

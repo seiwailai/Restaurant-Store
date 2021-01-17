@@ -137,7 +137,7 @@
         </div>
         <div id="product-content" class="product-grid-container">
             {% for product in page_obj.object_list %}
-                <div class="product-box">
+                <div class="product-box fadein">
                     <a class="product-link" href="{% url 'store-product-detail' product.id %}">
                         <img src="{{ product.imageURL }}" class="card-img-top" alt="...">
                         <div class="card-body">
