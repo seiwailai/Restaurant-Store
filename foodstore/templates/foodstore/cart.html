@@ -42,7 +42,7 @@
                                                     <div class="input-group-prepend">
                                                     <button class="btn btn-light border border-3 updateCart" data-action="increaseQuantity" data-product="{{ item.product.id }}" type="button"> <i class="fa fa-plus"></i> </button>
                                                     </div>
-                                                    <input type="number" class="form-control border border-3 text-center" value="{{ item.quantity }}" style="width:3rem;">
+                                                    <input id="item_{{ item.product.id }}_quantity" type="number" class="form-control border border-3 text-center" value="{{ item.quantity }}" style="width:3rem;">
                                                     <div class="input-group-append">
                                                     <button class="btn btn-light border border-3 updateCart" data-action="reduceQuantity" data-product="{{ item.product.id }}" type="button"> <i class="fa fa-minus"></i> </button>
                                                     </div>
@@ -50,8 +50,8 @@
                                             </td>
                                             <td>
                                                 <div>
-                                                    <var>RM{{ item.get_total }}</var>
-                                                    <small class="text-muted"> RM{{ item.product.price }} each </small>
+                                                    <var>RM <span id="item_{{ item.product.id }}_price">{{ item.get_total }}</span></var>
+                                                    <small class="text-muted"> RM {{ item.product.price }} each </small>
                                                 </div> <!-- price-wrap .// -->
                                             </td>
                                             <td class="text-right d-none d-md-block">
@@ -119,44 +119,8 @@
             product = item['product']
             productID = productID
             if (item.quantity > 0){
-                itemContent = `<tr id="cartProduct${productID}">
-                            <td>
-                                <figure class="">
-                                    <div class="d-inline-block"><img src="${product['imageURL']}" class="img-sm"></div>
-                                    <figcaption class="d-inline-block">
-                                        <a href="#" class="title text-dark">${product['name']}</a>
-                                        <p class="text-muted small mb-0">
-                                            Pax Set: ${product['pax']} Person 
-                                            <br>
-                                            Category:
-                                            ${product['category'].map(group => group).join(" ")}
-                                        </p>
-                                    </figcaption>
-                                </figure>
-                            </td>
-                            <td>
-                                <div class="d-flex">
-                                    <div class="input-group-prepend">
-                                    <button class="btn btn-light border border-3 updateCart" data-action="increaseQuantity" data-product="${productID}" type="button"> <i class="fa fa-plus"></i> </button>
-                                    </div>
-                                    <input type="number" class="form-control border border-3 text-center" value="${item['quantity']}" style="width:3rem;">
-                                    <div class="input-group-append">
-                                    <button class="btn btn-light border border-3 updateCart" data-action="reduceQuantity" data-product="${productID}" type="button"> <i class="fa fa-minus"></i> </button>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="price-wrap">
-                                    <var class="price">RM${item['get_total']}</var>
-                                    <small class="text-muted"> RM${product['price']} each </small>
-                                </div> <!-- price-wrap .// -->
-                            </td>
-                            <td class="text-right d-none d-md-block">
-                            <button data-action="removeItem" data-product="${productID}" class="btn btn-light updateCart"> Remove</button>
-                            </td>
-                        </tr>`
-                $(`#cartProduct${productID}`).replaceWith(itemContent)
-                $(document).ready(cartButtonAjax($(`#cartProduct${productID}`)))
+                $(`#item_${productID}_quantity`).val(item.quantity)
+                $(`#item_${productID}_price`).html(item.get_total)
             }
             else{
                 $(`#cartProduct${productID}`).remove()
