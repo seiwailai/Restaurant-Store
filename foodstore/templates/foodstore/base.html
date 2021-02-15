@@ -156,7 +156,6 @@
         {% block jquery %}{% endblock %}
         window.onpopstate = function(e){
             if (!history.state){
-                console.log('hello')
                 $.ajax({
                     url: "",
                     method: 'GET',

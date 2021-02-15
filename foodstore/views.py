@@ -420,7 +420,6 @@ def create_checkout_session(request):
     customer, order = get_customer_and_order(request)
     data = cartData(order)
     voucher = order.discount_code
-    print(voucher)
     if voucher:
         try:
             stripe.Coupon.retrieve(voucher.code)
@@ -455,7 +454,6 @@ def create_checkout_session(request):
         )
         return JsonResponse({'session_id' : session.id, 'STRIPE_PK': settings.STRIPE_PK})
     except Exception as e:
-        print(e)
         response = JsonResponse({'error': str(e)})
         response.status_code = 403
         return response

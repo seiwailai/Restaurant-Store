@@ -16,10 +16,10 @@ Description:
     - Review previous orders
     - Change password
   f. Authentication-related features
-    -Log in
-    -Sign up
-    -Log out
-    -Reset password
+    - Log in
+    - Sign up
+    - Log out
+    - Reset password
   
   Owner perspective (through Django Admin Site):
   a. Add product
